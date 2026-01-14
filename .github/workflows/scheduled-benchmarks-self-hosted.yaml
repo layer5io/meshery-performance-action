@@ -162,7 +162,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        service-mesh: ['istio', 'linkerd', 'osm']
+        service-mesh: ['istio', 'linkerd']
         load-generator: ['fortio', 'wrk2']
         test-configuration: ['load-test','soak-test']
     outputs:
@@ -206,7 +206,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        service-mesh: ['istio', 'linkerd', 'osm']
+        service-mesh: ['istio', 'linkerd']
         load-generator: ['fortio', 'wrk2']
         test-configuration: ['load-test','soak-test']
     steps:
@@ -270,7 +270,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        service-mesh: ['istio', 'linkerd', 'osm']
+        service-mesh: ['istio', 'linkerd']
         load-generator: ['fortio', 'wrk2']
         test-configuration: ['load-test','soak-test']
     if: ${{ always() && github.event_name == 'schedule' }} # required to stop the runner even if the error happened in the previous jobs

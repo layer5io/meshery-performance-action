@@ -8,7 +8,7 @@ adapters["linkerd"]=meshery-linkerd:10001
 adapters["consul"]=meshery-consul:10002
 adapters["network_service_mesh"]=meshery-nsm:10004
 adapters["kuma"]=meshery-kuma:10007
-adapters["open_service_mesh"]=meshery-osm:10009
+
 adapters["traefik_mesh"]=meshery-traefik-mesh:10006
 
 main() {

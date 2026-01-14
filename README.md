@@ -58,11 +58,6 @@ Meshery supports 10 different service meshes.
              <img src='https://docs.meshery.io/assets/img/service-meshes/kuma.svg' alt='Kuma Service Mesh' align="middle" hspace="5px" vspace="5px" height="30px" width="30px">Meshery adapter for Kuma</a>
            </td>
         </tr>
-          <tr>
-          <td><a href="https://github.com/layer5io/meshery-osm">
-            <img src='https://docs.meshery.io/assets/img/service-meshes/osm.svg' alt='Open Service Mesh' align="middle" hspace="5px" vspace="5px" height="30px" width="30px">Meshery adapter for Open Service Mesh</a>
-          </td>
-        </tr>
         <tr><td colspan="2" class="stable-adapters"></td></tr>
         <tr>
           <td rowspan="5" class="beta-adapters">beta</td>

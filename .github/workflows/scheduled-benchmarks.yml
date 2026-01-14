@@ -66,7 +66,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        service-mesh: ['istio', 'linkerd', 'osm']
+        service-mesh: ['istio', 'linkerd']
         load-generator: ['fortio', 'wrk2']
         test-configuration: ['load-test.yaml','soak-test.yaml']
     steps:
