@@ -28,7 +28,7 @@ main() {
 		printf "Token not provided.\nUsing local provider...\n"
 		echo '{ "meshery-provider": "None", "token": null }' | jq -c '.token = ""'> ~/auth.json
 	else
-		echo '{ "meshery-provider": "Meshery", "token": null }' | jq -c '.token = "'$provider_token'"' > ~/auth.json
+		echo '{ "meshery-provider": "Layer5", "token": null }' | jq -c '.token = "'$provider_token'"' > ~/auth.json
 	fi
 	cat ~/auth.json
 
