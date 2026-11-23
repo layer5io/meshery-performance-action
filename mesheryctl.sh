@@ -24,8 +24,8 @@ main() {
 	# perform the test given in the provided profile_id
 	if [ -z "$perf_filename" ]
 	then
-		# get the mesh name from performance test config
-		service_mesh=$(mesheryctl perf view $perf_profile_name -t ~/auth.json -o json 2>&1 | jq '."service_mesh"' | tr -d '"')
+		# perf profile searches by name and prints a JSON array, so pick the exact match
+		service_mesh=$(mesheryctl perf profile "$perf_profile_name" -t ~/auth.json -o json | jq -r --arg name "$perf_profile_name" 'first(.[]? | select(.name == $name) | .serviceMesh) // empty')
 		echo "Checking service mesh list from given profile..."
 		#echo $service_mesh
 		if [[ -n $service_mesh ]]
