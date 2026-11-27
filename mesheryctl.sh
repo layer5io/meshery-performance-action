@@ -24,8 +24,20 @@ main() {
 	# perform the test given in the provided profile_id
 	if [ -z "$perf_filename" ]
 	then
-		# get the mesh name from performance test config
-		service_mesh=$(mesheryctl perf view $perf_profile_name -t ~/auth.json -o json 2>&1 | jq '."service_mesh"' | tr -d '"')
+		# perf profile prints one page of name matches as a JSON array, so walk the pages for the exact name
+		# mesheryctl v1.0.83 has no --pagesize flag and always fetches 25 per page
+		local page=1 page_size=25 profiles count
+		while :
+		do
+			profiles=$(mesheryctl perf profile "$perf_profile_name" -t ~/auth.json -o json --page "$page")
+			count=$(jq -r 'if type == "array" then length else 0 end' <<<"$profiles" 2>/dev/null)
+			service_mesh=$(jq -r --arg name "$perf_profile_name" 'first(.[]? | select(.name == $name) | .serviceMesh) // empty' <<<"$profiles" 2>/dev/null)
+			if [[ -n $service_mesh || ${count:-0} -lt $page_size ]]
+			then
+				break
+			fi
+			page=$((page + 1))
+		done
 		echo "Checking service mesh list from given profile..."
 		#echo $service_mesh
 		if [[ -n $service_mesh ]]
@@ -53,7 +65,7 @@ main() {
 		#rand_string=$(openssl rand -hex 3)
 		#perf_profile_name="$rand_string-$perf_profile_name"
 		echo "Running test with performance profile $perf_profile_name"
-		mesheryctl perf apply $perf_profile_name -t ~/auth.json --yes
+		mesheryctl perf apply "$perf_profile_name" -t ~/auth.json --yes
 		
 	else
 		echo "Executing from given test config file..."
