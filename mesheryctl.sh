@@ -25,10 +25,11 @@ main() {
 	if [ -z "$perf_filename" ]
 	then
 		# perf profile prints one page of name matches as a JSON array, so walk the pages for the exact name
+		# mesheryctl v1.0.83 has no --pagesize flag and always fetches 25 per page
 		local page=1 page_size=25 profiles count
 		while :
 		do
-			profiles=$(mesheryctl perf profile "$perf_profile_name" -t ~/auth.json -o json --page "$page" --pagesize "$page_size")
+			profiles=$(mesheryctl perf profile "$perf_profile_name" -t ~/auth.json -o json --page "$page")
 			count=$(jq -r 'if type == "array" then length else 0 end' <<<"$profiles" 2>/dev/null)
 			service_mesh=$(jq -r --arg name "$perf_profile_name" 'first(.[]? | select(.name == $name) | .serviceMesh) // empty' <<<"$profiles" 2>/dev/null)
 			if [[ -n $service_mesh || ${count:-0} -lt $page_size ]]
