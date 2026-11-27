@@ -53,7 +53,7 @@ main() {
 		#rand_string=$(openssl rand -hex 3)
 		#perf_profile_name="$rand_string-$perf_profile_name"
 		echo "Running test with performance profile $perf_profile_name"
-		mesheryctl perf apply $perf_profile_name -t ~/auth.json --yes
+		mesheryctl perf apply "$perf_profile_name" -t ~/auth.json --yes
 		
 	else
 		echo "Executing from given test config file..."
