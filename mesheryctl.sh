@@ -24,8 +24,19 @@ main() {
 	# perform the test given in the provided profile_id
 	if [ -z "$perf_filename" ]
 	then
-		# perf profile searches by name and prints a JSON array, so pick the exact match
-		service_mesh=$(mesheryctl perf profile "$perf_profile_name" -t ~/auth.json -o json | jq -r --arg name "$perf_profile_name" 'first(.[]? | select(.name == $name) | .serviceMesh) // empty')
+		# perf profile prints one page of name matches as a JSON array, so walk the pages for the exact name
+		local page=1 page_size=25 profiles count
+		while :
+		do
+			profiles=$(mesheryctl perf profile "$perf_profile_name" -t ~/auth.json -o json --page "$page" --pagesize "$page_size")
+			count=$(jq -r 'if type == "array" then length else 0 end' <<<"$profiles" 2>/dev/null)
+			service_mesh=$(jq -r --arg name "$perf_profile_name" 'first(.[]? | select(.name == $name) | .serviceMesh) // empty' <<<"$profiles" 2>/dev/null)
+			if [[ -n $service_mesh || ${count:-0} -lt $page_size ]]
+			then
+				break
+			fi
+			page=$((page + 1))
+		done
 		echo "Checking service mesh list from given profile..."
 		#echo $service_mesh
 		if [[ -n $service_mesh ]]
